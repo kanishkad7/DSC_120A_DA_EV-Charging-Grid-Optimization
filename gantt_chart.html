@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging Grid Optimization - Project Timeline</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .gantt-container {
+            padding: 40px;
+            overflow-x: auto;
+        }
+        
+        .gantt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .gantt-table th,
+        .gantt-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .gantt-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+            position: sticky;
+            top: 0;
+        }
+        
+        .gantt-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .task-name {
+            font-weight: 500;
+            color: #333;
+            min-width: 250px;
+        }
+        
+        .week-column {
+            width: 120px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .gantt-bar {
+            height: 30px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gantt-bar:hover {
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .gantt-bar.week1 {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gantt-bar.week2 {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .gantt-bar.week3 {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .gantt-bar.week4 {
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        .gantt-bar.week5 {
+            background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .gantt-bar.week6 {
+            background: linear-gradient(90deg, #30cfd0 0%, #330867 100%);
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 30px;
+            background-color: #f9f9f9;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        .summary {
+            padding: 30px;
+            background-color: #f0f4ff;
+            border-left: 4px solid #667eea;
+            margin-top: 20px;
+        }
+        
+        .summary h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .summary-item strong {
+            display: block;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .summary-item span {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        @media (max-width: 768px) {
+            .gantt-container {
+                overflow-x: scroll;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .gantt-table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 EV Charging Grid Optimization</h1>
+            <p>6-Week Project Timeline & Gantt Chart</p>
+        </div>
+        
+        <div class="gantt-container">
+            <table class="gantt-table">
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th class="week-column">Week 1</th>
+                        <th class="week-column">Week 2</th>
+                        <th class="week-column">Week 3</th>
+                        <th class="week-column">Week 4</th>
+                        <th class="week-column">Week 5</th>
+                        <th class="week-column">Week 6</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="task-name">🔧 Project Setup & Problem Definition</td>
+                        <td class="week-column"><div class="gantt-bar week1">■■■■■</div></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">📂 Dataset Exploration</td>
+                        <td class="week-column"><div class="gantt-bar week1">■■■■■</div></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">🔄 Data Ingestion Pipeline</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week2">■■■■■</div></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">🧹 Data Cleaning & Preprocessing</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week2">■■■■■</div></td>
+                        <td class="week-column"><div class="gantt-bar week3" style="opacity:0.4;">■■</div></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">📈 Exploratory Data Analysis</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week3">■■■■■</div></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">📊 Visualization & Insights</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week3">■■■■■</div></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">🤖 Forecasting Model Development</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week4">■■■■■</div></td>
+                        <td class="week-column"><div class="gantt-bar week5" style="opacity:0.4;">■■</div></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">🎯 Clustering & Optimization</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week4">■■■■■</div></td>
+                        <td class="week-column"><div class="gantt-bar week5" style="opacity:0.4;">■■</div></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">✅ Model Evaluation</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week5">■■■■■</div></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">💡 Optimization Insights</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week5">■■■■■</div></td>
+                        <td class="week-column"></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">📝 Final Report Writing</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week6">■■■■■</div></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">🎤 Presentation Preparation</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week6">■■■■■</div></td>
+                    </tr>
+                    <tr>
+                        <td class="task-name">📚 GitHub Documentation</td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"></td>
+                        <td class="week-column"><div class="gantt-bar week6">■■■■■</div></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
+                    <span>Week 1: Setup & Exploration</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);"></div>
+                    <span>Week 2: Data Pipeline</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);"></div>
+                    <span>Week 3: EDA & Visualization</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);"></div>
+                    <span>Week 4: Modeling</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);"></div>
+                    <span>Week 5: Evaluation</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(90deg, #30cfd0 0%, #330867 100%);"></div>
+                    <span>Week 6: Finalization</span>
+                </div>
+            </div>
+            
+            <div class="summary">
+                <h3>📋 Project Summary</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <strong>Project Duration</strong>
+                        <span>6 weeks (42 days)</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Total Tasks</strong>
+                        <span>12 major deliverables</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Phase 1: Foundation</strong>
+                        <span>Weeks 1-3: Data preparation</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Phase 2: Development</strong>
+                        <span>Weeks 4-5: Modeling & evaluation</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Phase 3: Delivery</strong>
+                        <span>Week 6: Documentation & presentation</span>
+                    </div>
+                    <div class="summary-item">
+                        <strong>Key Dependencies</strong>
+                        <span>Data cleaning overlaps weeks 2-3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
