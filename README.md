@@ -2,9 +2,9 @@ Optimizing EV Charging Demand Using Data‑Driven Grid Intelligence
 
 Team and Roles
 - Siddhant Santosh Mathapati — Team Lead
-- Sharath Chandra Revu — Data Engineer 
-- Kanishk Akula Damodar — ML Engineer
-- Afnan Ahmed Anwar Shaikh— Documentation & Data Analyst
+- Sharath Chandra Revu       — Data Engineer 
+- Kanishk Akula Damodar      — ML Engineer
+- Valluri Venkata Praveen    — Documentation & Data Analyst
 
 Introduction:- 
 
@@ -17,3 +17,4 @@ Data
 Dataset Link: https://www.kaggle.com/datasets/mjawad17/ev-charging-and-grid-optimization-data/data
 Data rows available: 8354
 Data Columns: 27
+
